@@ -27,8 +27,10 @@ SO THAT I can organize and plan my business
 * [![Node.js](https://img.shields.io/badge/Node.js®-v20.4.0-blue?logo=node.js)](https://nodejs.org/en)
 
 * [![npm](https://img.shields.io/badge/npm-v9.8.0-blue?logo=npm)](https://docs.npmjs.com/cli/v9/)
+  * [![DotEnv Package](https://img.shields.io/badge/Express-16.3.1-green?logo=dotenv)](https://www.npmjs.com/package/dotenv)
   * [![Express Package](https://img.shields.io/badge/Express-4.18.2-green?logo=express)](https://expressjs.com/)
   * [![Inquirer Package](https://img.shields.io/badge/Inquirer-8.2.5-green?logo=npm)](https://www.npmjs.com/package/inquirer)
+  * [![MySQL2 Package](https://img.shields.io/badge/MySQL2-3.5.2-green?logo=mysql)](https://www.npmjs.com/package/https://www.npmjs.com/package/mysql2)
 
 [*back to top*](#table-of-contents)
 
@@ -43,10 +45,10 @@ SO THAT I can organize and plan my business
 >```
 >
 >```bash
->npm i express @4.18.2 inquirer@8.2.5
+>npm i dotenv@16.3.1 express@4.18.2 inquirer@8.2.5 mysql2@3.5.2
 >```
 >
-> **Important**: Make sure to @ the **EXACT** versions as shown above.
+> **Important**: Please @ the **EXACT** versions as shown above to ensure the functionality of this application.
 
 [*back to top*](#table-of-contents)
 
@@ -55,7 +57,7 @@ SO THAT I can organize and plan my business
 * This application can be invoked by using the following command:
 
 ```bash
-node index.js
+npm start
 ```
 
 * Workflow:
