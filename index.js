@@ -1,17 +1,12 @@
-// Importing required modules
 const inquirer = require('inquirer');
 const mysql = require('mysql2/promise');
 require('dotenv').config();
-
 const department = require('./models/department');
 const role = require('./models/role');
 const employee = require('./models/employee');
-
 const Table = require('cli-table3');
 const welcome = require('./middleware/welcome')
-
 main();
-
 async function main() {
     const db = await mysql.createConnection({
         host: process.env.DB_HOST,
@@ -20,9 +15,7 @@ async function main() {
         database: process.env.DB_NAME
     });
     console.log('\x1b[96m%s\x1b[0m', welcome, "Connected to the database!");
-
     let shouldExit = false;
-
     while (!shouldExit) {
         const answer = await inquirer.prompt({
             name: "action",
@@ -44,7 +37,6 @@ async function main() {
                 "Exit"
             ]
         });
-
         switch (answer.action) {
             case "View all departments": {
                 const departments = await department.getDepartments(db);
@@ -58,8 +50,6 @@ async function main() {
                     const totalBudget = await employee.getTotalBudgetByDepartmentId(db, department.id);
                     table.push([department.id, department.name, totalUtilizedBudget, totalBudget]);
                 }
-
-
                 console.log(table.toString());
                 break;
             }
@@ -77,7 +67,6 @@ async function main() {
                 console.log(table.toString());
                 break;
             }
-
             case "View all employees": {
                 const employees = await employee.getEmployees(db);
 
@@ -165,7 +154,6 @@ async function main() {
                 console.log('\x1b[96m%s\x1b[0m', "Employee added successfully!");
                 break;
             }
-
             case "Update a department": {
                 const depListToUpdate = await department.getDepartments(db);
                 const updateDepartmentChoices = depListToUpdate.map(dept => ({ name: dept.name, value: dept.id }));
@@ -189,11 +177,9 @@ async function main() {
             case "Update a role": {
                 const roleListToUpdate = await role.getRoles(db);
                 const updateRoleChoices = roleListToUpdate.map(r => ({ name: r.title, value: r.id }));
-
                 // Fetch departments for role
                 const departmentsForRoleUpdate = await department.getDepartments(db);
                 const departmentChoicesForRoleUpdate = departmentsForRoleUpdate.map(dept => ({ name: dept.name, value: dept.id }));
-
                 const { updatedRoleId, updatedRoleTitle, updatedRoleSalary, updatedRoleDepartmentId } = await inquirer.prompt([
                     {
                         name: 'updatedRoleId',
@@ -221,20 +207,16 @@ async function main() {
                 await role.updateRole(db, updatedRoleId, updatedRoleTitle, updatedRoleSalary, updatedRoleDepartmentId);
                 console.log('\x1b[96m%s\x1b[0m', "Role updated successfully!");
                 break;
-
             }
             case "Update an employee": {
                 const employeeListToUpdate = await employee.getEmployees(db);
                 const updateEmployeeChoices = employeeListToUpdate.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
-
                 // Fetch roles for employee
                 const rolesForEmployeeUpdate = await role.getRoles(db);
                 const roleChoicesForEmployeeUpdate = rolesForEmployeeUpdate.map(role => ({ name: role.title, value: role.id }));
-
                 // Fetch employees for potential managers
                 const potentialManagersForUpdate = await employee.getEmployees(db);
                 const managerChoicesForUpdate = potentialManagersForUpdate.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
-
                 const { updatedEmployeeId, updatedEmployeeFirstName, updatedEmployeeLastName, updatedEmployeeRoleId, updatedEmployeeManagerId } = await inquirer.prompt([
                     {
                         name: 'updatedEmployeeId',
@@ -269,7 +251,6 @@ async function main() {
                 console.log('\x1b[96m%s\x1b[0m', "Employee updated successfully!");
                 break;
             }
-
             case "Delete a department": {
                 const depListToDelete = await department.getDepartments(db);
                 const deleteDepartmentChoices = depListToDelete.map(dept => ({ name: dept.name, value: dept.id }));
@@ -281,10 +262,8 @@ async function main() {
                         choices: deleteDepartmentChoices,
                     }
                 ]);
-
                 // Fetch all roles from the database
                 const roles = await role.getRoles(db);
-
                 // Check if there are any roles associated with the department
                 const associatedRoles = roles.filter(role => role.department_id === departmentIdToDelete);
                 if (associatedRoles.length > 0) {
@@ -295,7 +274,6 @@ async function main() {
                 }
                 break;
             }
-
             case "Delete a role": {
                 const roleListToDelete = await role.getRoles(db);
                 const deleteRoleChoices = roleListToDelete.map(role => ({ name: role.title, value: role.id }));
@@ -307,10 +285,8 @@ async function main() {
                         choices: deleteRoleChoices,
                     }
                 ]);
-
                 // Fetch all employees with the role to be deleted
                 const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete);
-
                 // Check if there are any employees associated with the role
                 if (associatedEmployees.length > 0) {
                     console.warn(`Cannot delete. There are ${associatedEmployees.length} employee(s) associated with this role.`);
@@ -324,7 +300,6 @@ async function main() {
                 }
                 break;
             }
-
             case "Delete an employee": {
                 const employeeListToDelete = await employee.getEmployees(db);
                 const deleteEmployeeChoices = employeeListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
@@ -340,14 +315,12 @@ async function main() {
                 console.log('\x1b[96m%s\x1b[0m', "Employee deleted successfully!");
                 break;
             }
-
             case "Exit": {
                 shouldExit = true;
                 break;
             }
         }
     }
-
-    console.log("Goodbye!");
+    console.log("Thank you, and Goodbye!");
     await db.end();
 }
