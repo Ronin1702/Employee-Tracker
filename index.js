@@ -5,6 +5,7 @@ const employee = require('./models/employee');
 const Table = require('cli-table3');
 const welcome = require('./middleware/welcome')
 const createConnection = require('./config/connection');
+const inquirerModule = require('./models/inquirer');
 
 main();
 
@@ -13,27 +14,8 @@ async function main() {
     console.log('\x1b[96m%s\x1b[0m', welcome, "Connected to the database!");
     let shouldExit = false;
     while (!shouldExit) {
-        const answer = await inquirer.prompt({
-            name: "action",
-            type: "list",
-            message: "What would you like to do?",
-            choices: [
-                "View all departments",
-                "View all roles",
-                "View all employees",
-                "Add a department",
-                "Add a role",
-                "Add an employee",
-                "Update a department",
-                "Update a role",
-                "Update an employee",
-                "Delete a department",
-                "Delete a role",
-                "Delete an employee",
-                "Exit"
-            ]
-        });
-        switch (answer.action) {
+        const action = await inquirerModule.getActionChoice();
+        switch (action) {
             case "View all departments": {
                 const departments = await department.getDepartments(db);
                 const table = new Table({
