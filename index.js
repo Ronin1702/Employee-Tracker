@@ -1,19 +1,15 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql2/promise');
-require('dotenv').config();
 const department = require('./models/department');
 const role = require('./models/role');
 const employee = require('./models/employee');
 const Table = require('cli-table3');
 const welcome = require('./middleware/welcome')
+const createConnection = require('./config/connection');
+
 main();
+
 async function main() {
-    const db = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME
-    });
+    const db = await createConnection();
     console.log('\x1b[96m%s\x1b[0m', welcome, "Connected to the database!");
     let shouldExit = false;
     while (!shouldExit) {
