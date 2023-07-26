@@ -27,7 +27,7 @@ SO THAT I can organize and plan my business
 * [![Node.js](https://img.shields.io/badge/Node.js®-v20.4.0-blue?logo=node.js)](https://nodejs.org/en)
 
 * [![npm](https://img.shields.io/badge/npm-v9.8.0-blue?logo=npm)](https://docs.npmjs.com/cli/v9/)
-  * [![Cli-Table3 Package](https://img.shields.io/badge/Cli--Table3-0.6.3-green?logo=dotenv)](https://www.npmjs.com/package/cli-table3)
+  * [![Cli-Table3 Package](https://img.shields.io/badge/Cli--Table3-0.6.3-green?logo=npm)](https://www.npmjs.com/package/cli-table3)
   * [![DotEnv Package](https://img.shields.io/badge/Express-16.3.1-green?logo=dotenv)](https://www.npmjs.com/package/dotenv)
   * [![Express Package](https://img.shields.io/badge/Express-4.18.2-green?logo=express)](https://expressjs.com/)
   * [![Inquirer Package](https://img.shields.io/badge/Inquirer-8.2.5-green?logo=npm)](https://www.npmjs.com/package/inquirer)
