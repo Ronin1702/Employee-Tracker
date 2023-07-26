@@ -5,7 +5,7 @@ const employee = require('../models/employee');
 async function viewDepartments(db) {
   const departments = await department.getDepartments(db);
   const table = new Table({
-    head: ['ID', 'Name', 'Total Utilized Budget', 'Total Budget'],
+    head: ['ID', 'Title', 'Total Utilized Budget', 'Total Budget'],
     colWidths: [5, 15, 25, 15]
   });
 
