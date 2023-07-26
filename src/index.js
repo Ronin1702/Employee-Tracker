@@ -33,25 +33,33 @@ async function main() {
                 "Add a department",
                 "Add a role",
                 "Add an employee",
-                "Update an employee role",
+                "Update a department",
+                "Update a role",
+                "Update an employee",
+                "Delete a department",
+                "Delete a role",
+                "Delete an employee",
                 "Exit"
             ]
         });
 
         switch (answer.action) {
-            case "View all departments":
+            case "View all departments": {
                 const departments = await department.getDepartments(db);
                 console.table(departments);
                 break;
-            case "View all roles":
+            }
+            case "View all roles": {
                 const roles = await role.getRoles(db);
                 console.table(roles);
                 break;
-            case "View all employees":
+            }
+            case "View all employees": {
                 const employees = await employee.getEmployees(db);
                 console.table(employees);
                 break;
-            case "Add a department":
+            }
+            case "Add a department": {
                 const { name } = await inquirer.prompt({
                     name: "name",
                     type: "input",
@@ -60,7 +68,10 @@ async function main() {
                 await department.addDepartment(db, name);
                 console.log("Department added successfully!");
                 break;
-            case "Add a role":
+            }
+            case "Add a role": {
+                const departments = await department.getDepartments(db);
+                const departmentChoices = departments.map(dept => ({ name: dept.name, value: dept.id }));
                 const { title, salary, department_id } = await inquirer.prompt([
                     {
                         name: "title",
@@ -74,14 +85,18 @@ async function main() {
                     },
                     {
                         name: "department_id",
-                        type: "number",
-                        message: "Enter the department ID:"
+                        type: "list",
+                        message: "Choose the department:",
+                        choices: departmentChoices
                     }
                 ]);
                 await role.addRole(db, title, salary, department_id);
                 console.log("Role added successfully!");
                 break;
-            case "Add an employee":
+            }
+            case "Add an employee": {
+                const roles = await role.getRoles(db);
+                const roleChoices = roles.map(role => ({ name: role.title, value: role.id }));
                 const { first_name, last_name, role_id, manager_id } = await inquirer.prompt([
                     {
                         name: "first_name",
@@ -95,38 +110,155 @@ async function main() {
                     },
                     {
                         name: "role_id",
-                        type: "number",
-                        message: "Enter the employee's role ID:"
+                        type: "list",
+                        message: "Choose the employee's role:",
+                        choices: roleChoices
                     },
                     {
                         name: "manager_id",
-                        type: "number",
-                        message: "Enter the employee's manager's ID (or leave blank if none):",
-                        default: null
+                        type: "input",
+                        message: "Enter the employee's manager's ID (or leave blank if none):"
                     }
                 ]);
-                await employee.addEmployee(db, first_name, last_name, role_id, manager_id);
+                await employee.addEmployee(db, first_name, last_name, role_id, manager_id || null);
                 console.log("Employee added successfully!");
                 break;
-            case "Update an employee role":
-                const { employee_id, new_role_id } = await inquirer.prompt([
+            }
+
+            case "Update a department": {
+                const depListToUpdate = await department.getDepartments(db);
+                const updateDepartmentChoices = depListToUpdate.map(dept => ({ name: dept.name, value: dept.id }));
+                const { updatedDepartmentId, updatedDepartmentName } = await inquirer.prompt([
                     {
-                        name: "employee_id",
-                        type: "number",
-                        message: "Enter the ID of the employee you want to update:"
+                        name: 'updatedDepartmentId',
+                        type: 'list',
+                        message: 'Which department would you like to update?',
+                        choices: updateDepartmentChoices,
                     },
                     {
-                        name: "new_role_id",
-                        type: "number",
-                        message: "Enter the new role ID for this employee:"
+                        name: 'updatedDepartmentName',
+                        type: 'input',
+                        message: 'Enter the new name for the department:',
                     }
                 ]);
-                await employee.updateEmployeeRole(db, employee_id, new_role_id);
-                console.log("Employee role updated successfully!");
+                await department.updateDepartment(db, updatedDepartmentId, updatedDepartmentName);
+                console.log("Department updated successfully!");
                 break;
-            case "Exit":
+            }
+            case "Update a role": {
+                const roleListToUpdate = await role.getRoles(db);
+                const updateRoleChoices = roleListToUpdate.map(r => ({ name: r.title, value: r.id }));
+                const { updatedRoleId, updatedRoleTitle, updatedRoleSalary, updatedRoleDepartmentId } = await inquirer.prompt([
+                    {
+                        name: 'updatedRoleId',
+                        type: 'list',
+                        message: 'Which role would you like to update?',
+                        choices: updateRoleChoices,
+                    },
+                    {
+                        name: 'updatedRoleTitle',
+                        type: 'input',
+                        message: 'Enter the new title for the role:',
+                    },
+                    {
+                        name: 'updatedRoleSalary',
+                        type: 'number',
+                        message: 'Enter the new salary for the role:',
+                    },
+                    {
+                        name: 'updatedRoleDepartmentId',
+                        type: 'number',
+                        message: 'Enter the new department id for the role:',
+                    },
+                ]);
+                await role.updateRole(db, updatedRoleId, updatedRoleTitle, updatedRoleSalary, updatedRoleDepartmentId);
+                console.log("Role updated successfully!");
+                break;
+            }
+            case "Update an employee": {
+                const employeeListToUpdate = await employee.getEmployees(db);
+                const updateEmployeeChoices = employeeListToUpdate.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
+                const { updatedEmployeeId, updatedEmployeeFirstName, updatedEmployeeLastName, updatedEmployeeRoleId, updatedEmployeeManagerId } = await inquirer.prompt([
+                    {
+                        name: 'updatedEmployeeId',
+                        type: 'list',
+                        message: 'Which employee would you like to update?',
+                        choices: updateEmployeeChoices,
+                    },
+                    {
+                        name: 'updatedEmployeeFirstName',
+                        type: 'input',
+                        message: 'Enter the new first name for the employee:',
+                    },
+                    {
+                        name: 'updatedEmployeeLastName',
+                        type: 'input',
+                        message: 'Enter the new last name for the employee:',
+                    },
+                    {
+                        name: 'updatedEmployeeRoleId',
+                        type: 'number',
+                        message: 'Enter the new role id for the employee:',
+                    },
+                    {
+                        name: 'updatedEmployeeManagerId',
+                        type: 'number',
+                        message: 'Enter the new manager id for the employee:',
+                    },
+                ]);
+                await employee.updateEmployee(db, updatedEmployeeId, updatedEmployeeFirstName, updatedEmployeeLastName, updatedEmployeeRoleId, updatedEmployeeManagerId);
+                console.log("Employee updated successfully!");
+                break;
+            }
+            case "Delete a department": {
+                const depListToDelete = await department.getDepartments(db);
+                const deleteDepartmentChoices = depListToDelete.map(dept => ({ name: dept.name, value: dept.id }));
+                const { departmentIdToDelete } = await inquirer.prompt([
+                    {
+                        name: 'departmentIdToDelete',
+                        type: 'list',
+                        message: 'Which department would you like to delete?',
+                        choices: deleteDepartmentChoices,
+                    }
+                ]);
+                await department.deleteDepartment(db, departmentIdToDelete);
+                console.log("Department deleted successfully!");
+                break;
+            }
+            case "Delete a role": {
+                const roleListToDelete = await role.getRoles(db);
+                const deleteRoleChoices = roleListToDelete.map(r => ({ name: r.title, value: r.id }));
+                const { roleIdToDelete } = await inquirer.prompt([
+                    {
+                        name: 'roleIdToDelete',
+                        type: 'list',
+                        message: 'Which role would you like to delete?',
+                        choices: deleteRoleChoices,
+                    }
+                ]);
+                await role.deleteRole(db, roleIdToDelete);
+                console.log("Role deleted successfully!");
+                break;
+            }
+            case "Delete an employee": {
+                const employeeListToDelete = await employee.getEmployees(db);
+                const deleteEmployeeChoices = employeeListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
+                const { employeeIdToDelete } = await inquirer.prompt([
+                    {
+                        name: 'employeeIdToDelete',
+                        type: 'list',
+                        message: 'Which employee would you like to delete?',
+                        choices: deleteEmployeeChoices,
+                    }
+                ]);
+                await employee.deleteEmployee(db, employeeIdToDelete);
+                console.log("Employee deleted successfully!");
+                break;
+            }
+            case "Exit": {
                 shouldExit = true;
                 break;
+            }
         }
     }
 

@@ -1,6 +1,3 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
-
 async function getEmployees(db) {
     const [rows] = await db.query(`SELECT * FROM employee`);
     return rows;
@@ -16,8 +13,17 @@ async function updateEmployeeRole(db, employee_id, role_id) {
     await db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [role_id, employee_id]);
 }
 
+async function updateEmployee(db, id, first_name, last_name, role_id, manager_id) {
+    await db.query(`UPDATE employee SET first_name = ?, last_name = ?, role_id = ?, manager_id = ? WHERE id = ?`, [first_name, last_name, role_id, manager_id, id]);
+}
+
+async function deleteEmployee(db, id) {
+    await db.query(`DELETE FROM employee WHERE id = ?`, [id]);
+}
 module.exports = {
     getEmployees,
     addEmployee,
-    updateEmployeeRole
+    updateEmployeeRole,
+    updateEmployee,
+    deleteEmployee
 };
