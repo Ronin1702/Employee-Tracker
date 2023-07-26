@@ -65,7 +65,7 @@ async function main() {
                 const departments = await department.getDepartments(db);
                 const table = new Table({
                     head: ['ID', 'Name', 'Total Utilized Budget', 'Total Budget'],
-                    colWidths: [10, 30, 30, 15]
+                    colWidths: [5, 15, 20, 15]
                 });
 
                 for (const department of departments) {
@@ -82,7 +82,7 @@ async function main() {
                 const roles = await role.getRoles(db);
                 const table = new Table({
                     head: ['ID', 'Title', 'Salary', 'Department'],
-                    colWidths: [10, 20, 20, 20]
+                    colWidths: [5, 15, 15, 15]
                 });
 
                 roles.forEach(role => {
@@ -97,8 +97,8 @@ async function main() {
                 const employees = await employee.getEmployees(db);
 
                 const table = new Table({
-                    head: ['ID', 'First Name', 'Last Name', 'Role', 'Department', 'Employee Manager', 'Salary'],
-                    colWidths: [10, 20, 20, 20, 20, 20, 20]
+                    head: ['ID', 'First Name', 'Last Name', 'Role', 'Department', 'Manager', 'Salary'],
+                    colWidths: [5, 15, 15, 15, 15, 15, 15]
                 });
 
                 employees.forEach(employee => {
