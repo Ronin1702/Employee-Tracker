@@ -65,7 +65,7 @@ async function main() {
                 const departments = await department.getDepartments(db);
                 const table = new Table({
                     head: ['ID', 'Name', 'Total Utilized Budget', 'Total Budget'],
-                    colWidths: [5, 15, 20, 15]
+                    colWidths: [5, 15, 25, 15]
                 });
 
                 for (const department of departments) {
