@@ -246,13 +246,24 @@ async function main() {
                         choices: deleteDepartmentChoices,
                     }
                 ]);
-                await department.deleteDepartment(db, departmentIdToDelete);
-                console.log("Department deleted successfully!");
+
+                // Fetch all roles from the database
+                const roles = await role.getRoles(db);  // Replace `role` with the actual role model object if it's named differently
+
+                // Check if there are any roles associated with the department
+                const associatedRoles = roles.filter(role => role.department_id === departmentIdToDelete);
+                if (associatedRoles.length > 0) {
+                    console.warn(`Cannot delete department. There are ${associatedRoles.length} role(s) associated with this department.`);
+                } else {
+                    await department.deleteDepartment(db, departmentIdToDelete);
+                    console.log("Department deleted successfully!");
+                }
                 break;
             }
+
             case "Delete a role": {
                 const roleListToDelete = await role.getRoles(db);
-                const deleteRoleChoices = roleListToDelete.map(r => ({ name: r.title, value: r.id }));
+                const deleteRoleChoices = roleListToDelete.map(role => ({ name: role.title, value: role.id }));
                 const { roleIdToDelete } = await inquirer.prompt([
                     {
                         name: 'roleIdToDelete',
@@ -261,10 +272,24 @@ async function main() {
                         choices: deleteRoleChoices,
                     }
                 ]);
-                await role.deleteRole(db, roleIdToDelete);
-                console.log("Role deleted successfully!");
+            
+                // Fetch all employees with the role to be deleted
+                const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete);  // Replace `employee` with the actual employee model object if it's named differently
+            
+                // Check if there are any employees associated with the role
+                if (associatedEmployees.length > 0) {
+                    console.warn(`Cannot delete. There are ${associatedEmployees.length} employee(s) associated with this role.`);
+                } else {
+                    try {
+                        await role.deleteRole(db, roleIdToDelete);
+                        console.log("Role deleted successfully!");
+                    } catch (error) {
+                        console.error('Error deleting role:', error);
+                    }
+                }
                 break;
             }
+            
             case "Delete an employee": {
                 const employeeListToDelete = await employee.getEmployees(db);
                 const deleteEmployeeChoices = employeeListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
@@ -280,6 +305,37 @@ async function main() {
                 console.log("Employee deleted successfully!");
                 break;
             }
+            case "Update employee role": {
+                const allEmployees = await employee.getEmployees(db);  
+                const employeeChoices = allEmployees.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
+            
+                const allRoles = await role.getRoles(db);  
+                const roleChoices = allRoles.map(role => ({ name: role.title, value: role.id }));
+            
+                const { employeeIdToUpdate, newRoleId } = await inquirer.prompt([
+                    {
+                        name: 'employeeIdToUpdate',
+                        type: 'list',
+                        message: 'Which employee\'s role do you want to update?',
+                        choices: employeeChoices,
+                    },
+                    {
+                        name: 'newRoleId',
+                        type: 'list',
+                        message: 'Which role do you want to assign to the selected employee?',
+                        choices: roleChoices,
+                    }
+                ]);
+            
+                try {
+                    await employee.updateEmployeeRole(db, employeeIdToUpdate, newRoleId);
+                    console.log("Employee role updated successfully!");
+                } catch (error) {
+                    console.error('Error updating employee role:', error);
+                }
+                break;
+            }
+            
             case "Exit": {
                 shouldExit = true;
                 break;
