@@ -290,52 +290,6 @@ async function main() {
                 break;
             }
             
-            case "Delete an employee": {
-                const employeeListToDelete = await employee.getEmployees(db);
-                const deleteEmployeeChoices = employeeListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
-                const { employeeIdToDelete } = await inquirer.prompt([
-                    {
-                        name: 'employeeIdToDelete',
-                        type: 'list',
-                        message: 'Which employee would you like to delete?',
-                        choices: deleteEmployeeChoices,
-                    }
-                ]);
-                await employee.deleteEmployee(db, employeeIdToDelete);
-                console.log("Employee deleted successfully!");
-                break;
-            }
-            case "Update employee role": {
-                const allEmployees = await employee.getEmployees(db);  
-                const employeeChoices = allEmployees.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
-            
-                const allRoles = await role.getRoles(db);  
-                const roleChoices = allRoles.map(role => ({ name: role.title, value: role.id }));
-            
-                const { employeeIdToUpdate, newRoleId } = await inquirer.prompt([
-                    {
-                        name: 'employeeIdToUpdate',
-                        type: 'list',
-                        message: 'Which employee\'s role do you want to update?',
-                        choices: employeeChoices,
-                    },
-                    {
-                        name: 'newRoleId',
-                        type: 'list',
-                        message: 'Which role do you want to assign to the selected employee?',
-                        choices: roleChoices,
-                    }
-                ]);
-            
-                try {
-                    await employee.updateEmployeeRole(db, employeeIdToUpdate, newRoleId);
-                    console.log("Employee role updated successfully!");
-                } catch (error) {
-                    console.error('Error updating employee role:', error);
-                }
-                break;
-            }
-            
             case "Exit": {
                 shouldExit = true;
                 break;

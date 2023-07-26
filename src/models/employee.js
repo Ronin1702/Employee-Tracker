@@ -27,10 +27,6 @@ async function addEmployee(db, first_name, last_name, role_id, manager_id) {
 }
 
 
-async function updateEmployeeRole(db, employee_id, role_id) {
-    await db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [role_id, employee_id]);
-}
-
 async function updateEmployee(db, id, first_name, last_name, role_id, manager_id) {
     await db.query(`UPDATE employee SET first_name = ?, last_name = ?, role_id = ?, manager_id = ? WHERE id = ?`, [first_name, last_name, role_id, manager_id, id]);
 }
@@ -51,7 +47,6 @@ async function getEmployeesByRoleId(db, role_id) {
 module.exports = {
     getEmployees,
     addEmployee,
-    updateEmployeeRole,
     updateEmployee,
     deleteEmployee,
     getEmployeesByRoleId
