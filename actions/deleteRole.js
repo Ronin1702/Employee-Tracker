@@ -20,7 +20,7 @@ async function deleteRole(db) {
 
     // Check if there are any employees associated with the role
     if (associatedEmployees.length > 0) {
-      console.warn(`Cannot delete. There are ${associatedEmployees.length} employee(s) associated with this role.`);
+      console.warn('\x1b[91m%s\x1b[0m', `Cannot delete. There are ${associatedEmployees.length} employee(s) associated with this role.`);
     } else {
       await role.deleteRole(db, roleIdToDelete);
       console.log('\x1b[96m%s\x1b[0m', "Role deleted successfully!");

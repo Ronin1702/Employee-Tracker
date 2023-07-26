@@ -21,7 +21,7 @@ async function deleteDepartment(db) {
     const associatedRoles = roles.filter(role => role.department_id === departmentIdToDelete);
 
     if (associatedRoles.length > 0) {
-      console.warn(`Cannot delete department. There are ${associatedRoles.length} role(s) associated with this department.`);
+      console.warn('\x1b[91m%s\x1b[0m', `Cannot delete department. There are ${associatedRoles.length} role(s) associated with this department.`);
     } else {
       await department.deleteDepartment(db, departmentIdToDelete);
       console.log('\x1b[96m%s\x1b[0m', "Department deleted successfully!");
