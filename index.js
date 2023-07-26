@@ -7,6 +7,23 @@ const department = require('./models/department');
 const role = require('./models/role');
 const employee = require('./models/employee');
 
+const Table = require('cli-table3');
+const welcome = `
+#  ███████╗███╗   ███╗██████╗ ██╗      ██████╗ ██╗   ██╗███████╗███████╗
+#  ██╔════╝████╗ ████║██╔══██╗██║     ██╔═══██╗╚██╗ ██╔╝██╔════╝██╔════╝
+#  █████╗  ██╔████╔██║██████╔╝██║     ██║   ██║ ╚████╔╝ █████╗  █████╗  
+#  ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██║   ██║  ╚██╔╝  ██╔══╝  ██╔══╝  
+#  ███████╗██║ ╚═╝ ██║██║     ███████╗╚██████╔╝   ██║   ███████╗███████╗
+#  ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝ ╚═════╝    ╚═╝   ╚══════╝╚══════╝
+#                                                                       
+#  ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗             
+#  ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗            
+#     ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝            
+#     ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗            
+#     ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║            
+#     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝            
+#
+`;
 // Start the main function
 main();
 
@@ -17,7 +34,7 @@ async function main() {
         password: process.env.DB_PASS,
         database: process.env.DB_NAME
     });
-    console.log("Connected to the database!");
+    console.log('\x1b[96m%s\x1b[0m', welcome, "Connected to the database!");
 
     let shouldExit = false;
 
@@ -46,19 +63,49 @@ async function main() {
         switch (answer.action) {
             case "View all departments": {
                 const departments = await department.getDepartments(db);
-                console.table(departments);
+                const table = new Table({
+                    head: ['ID', 'Name'],
+                    colWidths: [10, 30]
+                });
+
+                departments.forEach(department => {
+                    table.push([department.id, department.name]);
+                });
+
+                console.log(table.toString());
                 break;
             }
             case "View all roles": {
                 const roles = await role.getRoles(db);
-                console.table(roles);
+                const table = new Table({
+                    head: ['ID', 'Title', 'Salary', 'Department'],
+                    colWidths: [10, 20, 20, 20]
+                });
+
+                roles.forEach(role => {
+                    table.push([role.id, role.title, role.salary, role.department_name]);
+                });
+
+                console.log(table.toString());
                 break;
             }
+
             case "View all employees": {
                 const employees = await employee.getEmployees(db);
-                console.table(employees);
+               
+                const table = new Table({
+                    head: ['ID', 'First Name', 'Last Name', 'Role', 'Department', 'Employee Manager', 'Salary'],
+                    colWidths: [10, 20, 20, 20, 20, 20, 20]
+                });                
+            
+                employees.forEach(employee => {
+                    table.push([employee.id, employee.first_name, employee.last_name, employee.title, employee.department, employee.manager, employee.salary]);
+                });
+            
+                console.log(table.toString());
                 break;
             }
+            
             case "Add a department": {
                 const { name } = await inquirer.prompt({
                     name: "name",
@@ -66,7 +113,7 @@ async function main() {
                     message: "Enter the department name:"
                 });
                 await department.addDepartment(db, name);
-                console.log("Department added successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Department added successfully!");
                 break;
             }
             case "Add a role": {
@@ -91,7 +138,7 @@ async function main() {
                     }
                 ]);
                 await role.addRole(db, title, salary, department_id);
-                console.log("Role added successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Role added successfully!");
                 break;
             }
             case "Add an employee": {
@@ -127,7 +174,7 @@ async function main() {
                     }
                 ]);
                 await employee.addEmployee(db, first_name, last_name, role_id, manager_id);
-                console.log("Employee added successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Employee added successfully!");
                 break;
             }
 
@@ -148,7 +195,7 @@ async function main() {
                     }
                 ]);
                 await department.updateDepartment(db, updatedDepartmentId, updatedDepartmentName);
-                console.log("Department updated successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Department updated successfully!");
                 break;
             }
             case "Update a role": {
@@ -184,7 +231,7 @@ async function main() {
                     },
                 ]);
                 await role.updateRole(db, updatedRoleId, updatedRoleTitle, updatedRoleSalary, updatedRoleDepartmentId);
-                console.log("Role updated successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Role updated successfully!");
                 break;
 
             }
@@ -231,7 +278,7 @@ async function main() {
                     },
                 ]);
                 await employee.updateEmployee(db, updatedEmployeeId, updatedEmployeeFirstName, updatedEmployeeLastName, updatedEmployeeRoleId, updatedEmployeeManagerId);
-                console.log("Employee updated successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Employee updated successfully!");
                 break;
             }
 
@@ -256,7 +303,7 @@ async function main() {
                     console.warn(`Cannot delete department. There are ${associatedRoles.length} role(s) associated with this department.`);
                 } else {
                     await department.deleteDepartment(db, departmentIdToDelete);
-                    console.log("Department deleted successfully!");
+                    console.log('\x1b[96m%s\x1b[0m', "Department deleted successfully!");
                 }
                 break;
             }
@@ -274,7 +321,7 @@ async function main() {
                 ]);
 
                 // Fetch all employees with the role to be deleted
-                const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete); 
+                const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete);
 
                 // Check if there are any employees associated with the role
                 if (associatedEmployees.length > 0) {
@@ -282,7 +329,7 @@ async function main() {
                 } else {
                     try {
                         await role.deleteRole(db, roleIdToDelete);
-                        console.log("Role deleted successfully!");
+                        console.log('\x1b[96m%s\x1b[0m', "Role deleted successfully!");
                     } catch (error) {
                         console.error('Error deleting role:', error);
                     }
@@ -302,7 +349,7 @@ async function main() {
                     }
                 ]);
                 await employee.deleteEmployee(db, employeeIdToDelete);
-                console.log("Employee deleted successfully!");
+                console.log('\x1b[96m%s\x1b[0m', "Employee deleted successfully!");
                 break;
             }
 
