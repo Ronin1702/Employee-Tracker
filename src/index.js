@@ -248,7 +248,7 @@ async function main() {
                 ]);
 
                 // Fetch all roles from the database
-                const roles = await role.getRoles(db);  // Replace `role` with the actual role model object if it's named differently
+                const roles = await role.getRoles(db);
 
                 // Check if there are any roles associated with the department
                 const associatedRoles = roles.filter(role => role.department_id === departmentIdToDelete);
@@ -272,10 +272,10 @@ async function main() {
                         choices: deleteRoleChoices,
                     }
                 ]);
-            
+
                 // Fetch all employees with the role to be deleted
-                const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete);  // Replace `employee` with the actual employee model object if it's named differently
-            
+                const associatedEmployees = await employee.getEmployeesByRoleId(db, roleIdToDelete); 
+
                 // Check if there are any employees associated with the role
                 if (associatedEmployees.length > 0) {
                     console.warn(`Cannot delete. There are ${associatedEmployees.length} employee(s) associated with this role.`);
@@ -289,7 +289,23 @@ async function main() {
                 }
                 break;
             }
-            
+
+            case "Delete an employee": {
+                const employeeListToDelete = await employee.getEmployees(db);
+                const deleteEmployeeChoices = employeeListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }));
+                const { employeeIdToDelete } = await inquirer.prompt([
+                    {
+                        name: 'employeeIdToDelete',
+                        type: 'list',
+                        message: 'Which employee would you like to delete?',
+                        choices: deleteEmployeeChoices,
+                    }
+                ]);
+                await employee.deleteEmployee(db, employeeIdToDelete);
+                console.log("Employee deleted successfully!");
+                break;
+            }
+
             case "Exit": {
                 shouldExit = true;
                 break;
