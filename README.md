@@ -1,6 +1,6 @@
 # Employee Tracker 3000 [![GPLv3](https://img.shields.io/static/v1.svg?label=📃%20License&message=MIT&color=important)](./LICENSE)
 
-A command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
+A simple command-line application to manage a company's employee database,  with functionalities such as view, update and delete departments, roles, and employees.
 
 ## Table of Contents
 
@@ -50,6 +50,15 @@ SO THAT I can organize and plan my business
 >
 > **Important**: Please @ the **EXACT** versions as shown above to ensure the functionality of this application.
 
+**Before you start, make sure to created a *`.env`* file in the root directory as the example shown below:**
+
+```bash
+DB_HOST=Replace this with your own hostname, e.g. "localhost"
+DB_USER=Replace this with your own username, e.g. "root"
+DB_PASS=Replace this with your own password to your "host"
+DB_NAME=employee_db
+```
+
 [*back to top*](#table-of-contents)
 
 ## Usage
@@ -93,6 +102,8 @@ THEN I am prompted to select an employee to update and their new role and this i
 The following video shows an example of the application being used from the command line:
 
 [![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
+
+[*back to top*](#table-of-contents)
 
 ## Links
 
