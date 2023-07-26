@@ -64,13 +64,16 @@ async function main() {
             case "View all departments": {
                 const departments = await department.getDepartments(db);
                 const table = new Table({
-                    head: ['ID', 'Name'],
-                    colWidths: [10, 30]
+                    head: ['ID', 'Name', 'Total Utilized Budget', 'Total Budget'],
+                    colWidths: [10, 30, 30, 15]
                 });
 
-                departments.forEach(department => {
-                    table.push([department.id, department.name]);
-                });
+                for (const department of departments) {
+                    const totalUtilizedBudget = await employee.getTotalUtilizedBudgetByDepartmentId(db, department.id);
+                    const totalBudget = await employee.getTotalBudgetByDepartmentId(db, department.id);
+                    table.push([department.id, department.name, totalUtilizedBudget, totalBudget]);
+                }
+
 
                 console.log(table.toString());
                 break;
@@ -92,20 +95,20 @@ async function main() {
 
             case "View all employees": {
                 const employees = await employee.getEmployees(db);
-               
+
                 const table = new Table({
                     head: ['ID', 'First Name', 'Last Name', 'Role', 'Department', 'Employee Manager', 'Salary'],
                     colWidths: [10, 20, 20, 20, 20, 20, 20]
-                });                
-            
+                });
+
                 employees.forEach(employee => {
                     table.push([employee.id, employee.first_name, employee.last_name, employee.title, employee.department, employee.manager, employee.salary]);
                 });
-            
+
                 console.log(table.toString());
                 break;
             }
-            
+
             case "Add a department": {
                 const { name } = await inquirer.prompt({
                     name: "name",
