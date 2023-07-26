@@ -8,23 +8,8 @@ const role = require('./models/role');
 const employee = require('./models/employee');
 
 const Table = require('cli-table3');
-const welcome = `
-#  ███████╗███╗   ███╗██████╗ ██╗      ██████╗ ██╗   ██╗███████╗███████╗
-#  ██╔════╝████╗ ████║██╔══██╗██║     ██╔═══██╗╚██╗ ██╔╝██╔════╝██╔════╝
-#  █████╗  ██╔████╔██║██████╔╝██║     ██║   ██║ ╚████╔╝ █████╗  █████╗  
-#  ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██║   ██║  ╚██╔╝  ██╔══╝  ██╔══╝  
-#  ███████╗██║ ╚═╝ ██║██║     ███████╗╚██████╔╝   ██║   ███████╗███████╗
-#  ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝ ╚═════╝    ╚═╝   ╚══════╝╚══════╝
-#                                                                       
-#  ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗             
-#  ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗            
-#     ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝            
-#     ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗            
-#     ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║            
-#     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝            
-#
-`;
-// Start the main function
+const welcome = require('./middleware/welcome')
+
 main();
 
 async function main() {
@@ -102,7 +87,7 @@ async function main() {
                 });
 
                 employees.forEach(employee => {
-                    table.push([employee.id, employee.first_name, employee.last_name, employee.title, employee.department, employee.manager, employee.salary]);
+                    table.push([employee.id, employee.first_name, employee.last_name, employee.title, employee.department, employee.manager || "", employee.salary]);
                 });
 
                 console.log(table.toString());
