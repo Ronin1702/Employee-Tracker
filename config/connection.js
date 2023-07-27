@@ -12,7 +12,7 @@ async function createConnection() {
     return db;
   } catch (error) {
     console.error("Error connecting to the database:", error.message);
-    process.exit(1); // Exit the application with an error code (1) if the connection fails.
+    process.exit(400); 
   }
 }
 
