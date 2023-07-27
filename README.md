@@ -99,10 +99,6 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ![Main](./img/Employee-Tracker-Screenshot.png)
 
-The following video shows an example of the application being used from the command line:
-
-[![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
-
 [*back to top*](#table-of-contents)
 
 ## Links
@@ -110,6 +106,9 @@ The following video shows an example of the application being used from the comm
 [![Tweet about this](https://img.shields.io/static/v1.svg?label=Tweet%20about%20this&message=🎵&color=blue&logo=twitter&style=social)](https://rb.gy/s47zc)
 
 * GitHub Repo: [Employee-Tracker](https://github.com/Ronin1702/Employee-Tracker)
+* Walkthrough Video
+
+[![Walkthrough Video](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
 
 [*back to top*](#table-of-contents)
 
