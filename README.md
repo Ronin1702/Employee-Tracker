@@ -108,7 +108,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 * GitHub Repo: [Employee-Tracker](https://github.com/Ronin1702/Employee-Tracker)
 * Walkthrough Video
 
-[![Walkthrough Video](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
+[![Walkthrough Video](./img/Employee%20Tracker.gif)](https://drive.google.com/file/d/1_zVCtHVpiJ8ZTMMw7eN3g57NYMmSHCzc/view)
 
 [*back to top*](#table-of-contents)
 
